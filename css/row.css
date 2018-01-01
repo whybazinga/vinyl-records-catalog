@@ -1,0 +1,38 @@
+.row{
+    display: flex;
+    justify-content: space-around;
+    height: 50px;
+    width: 96vw;
+    border: 3px solid rgb(230,230,230);
+    font-size: 16px;
+    line-height: 50px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    padding: 0 10px 0 10px;
+}
+
+.id{
+    height: 50px;
+    font-size: inherit;
+    width: 1vw;
+    border-right: 3px solid rgb(230,230,230);
+}
+
+.name1,
+.name2{
+    height: 50px;
+    width: 23vw;
+    font-size: inherit;
+}
+
+.c1,
+.c2,
+.c3,
+.c4,
+.c5,
+.c6,
+.c7{
+    width: 5.5vw;
+    height: 50px;
+    font-size: inherit;
+}
