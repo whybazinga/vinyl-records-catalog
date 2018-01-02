@@ -13,6 +13,7 @@
 
 .id{
     height: 50px;
+    padding-right: 10px;
     font-size: inherit;
     width: 1vw;
     border-right: 3px solid rgb(230,230,230);
@@ -20,6 +21,8 @@
 
 .name1,
 .name2{
+    overflow: hidden;
+    text-overflow: ellipsis;
     height: 50px;
     width: 23vw;
     font-size: inherit;
@@ -32,6 +35,8 @@
 .c5,
 .c6,
 .c7{
+    overflow: hidden;
+    text-overflow: ellipsis;
     width: 5.5vw;
     height: 50px;
     font-size: inherit;
