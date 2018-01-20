@@ -9,23 +9,27 @@
     border-radius: 10px;
     margin-bottom: 10px;
     padding: 0 10px 0 10px;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .id{
     height: 50px;
-    padding-right: 10px;
     font-size: inherit;
-    width: 1vw;
+    width: max(fit-content, 1vw);
+    padding-right: 5px; 
     border-right: 3px solid rgb(230,230,230);
+    overflow: inherit;
+    text-overflow: inherit;
 }
 
 .name1,
 .name2{
-    overflow: hidden;
-    text-overflow: ellipsis;
     height: 50px;
     width: 23vw;
     font-size: inherit;
+    overflow: inherit;
+    text-overflow: inherit;
 }
 
 .c1,
@@ -35,9 +39,9 @@
 .c5,
 .c6,
 .c7{
-    overflow: hidden;
-    text-overflow: ellipsis;
     width: 5.5vw;
     height: 50px;
     font-size: inherit;
+    overflow: inherit;
+    text-overflow: inherit;
 }

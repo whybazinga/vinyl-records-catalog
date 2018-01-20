@@ -2,10 +2,17 @@
     outline: none;
 }
 
-.search-button{
+.search-input{
+    height: 40px;
+    padding-left: 10px;
+    margin-right: 5px;
+    width: 100%;
+}
+
+#search-button{
+    margin-bottom: 3px;
     background-image: url("../images/loupe.png");
     opacity: 0.4;
-    margin-bottom: 3px;
 }
 
 .edit-button{
@@ -14,9 +21,27 @@
     opacity: 0.8;
 }
 
+#file-save-button{
+    margin-top: 5px;
+    background-image: url("../images/save.png");
+    opacity: 0.4;
+}
+
 .save-button{
     margin-top: 5px;
     background-image: url("../images/save.png");
+    opacity: 0.8;
+}
+
+#refresh-button{
+    margin-top: 5px;
+    background-image: url("../images/refresh.png");
+    opacity: 0.4;
+}
+
+#file-input-button{
+    margin-top: 5px;
+    background-image: url("../images/file.png");
     opacity: 0.8;
 }
 
@@ -27,6 +52,7 @@
     border: 1px solid lightgray;
     border-radius: 18px;
     box-shadow: 3px 3px 5px gray;
+    
     background-size: 30px 30px;
     background-position: center;
     background-repeat: no-repeat;
@@ -37,29 +63,15 @@
     box-shadow: 1px 1px 3px gray;
 }
 
-#file-input{
-    width: 0.1px;
-	height: 0.1px;
-	opacity: 0;
-	overflow: hidden;
-	position: absolute;
-	z-index: -1;
-}
-
-#file-input + label {
-    line-height: 40px;
-    width: 200px;
-    display: inline-block;
-    text-align: center;
-}
-
-#file-input + label:hover {
-    background-color: rgb(230,230,230);
-}
-
 .input{
     border: 3px solid rgb(230,230,230);
     font-size: 16px;
-    height: 40px;
     border-radius: 10px;
+}
+
+textarea{
+    resize: none;
+    background: rgb(243, 210, 210);
+    line-height: 16px;
+    max-height: 90%;
 }

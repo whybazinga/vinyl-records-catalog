@@ -1,16 +1,18 @@
 const search = {
     input: document.querySelector('.search-input'),
-    button: document.querySelector('.search-button'),
+    button: document.querySelector('#search-button'),
 }
 const fileInput = document.querySelector('#file-input');
 const main = document.querySelector('#main');
 const editButtons = document.getElementsByClassName('edit-button');
+const refreshButton = document.querySelector('#refresh-button');
+const saveFileButton = document.querySelector('#file-save-button');
 
 let BORDER_WIDTH = 3;
 
 let searchQuery = '';
 
-let text;
+let textFile;
 
 let rows = [];
 
@@ -23,6 +25,10 @@ search.button.onmousedown = search.input.onsearch = function () {
     }
 }
 
+function makeSearchRequest() {
+    searchQuery = search.input.value;
+}
+
 search.input.oninput = function () {
     if (search.input.value !== '') {
         search.button.style.opacity = '0.8';
@@ -32,21 +38,31 @@ search.input.oninput = function () {
     }
 }
 
-function makeSearchRequest() {
-    searchQuery = search.input.value;
-}
-
-
 fileInput.onchange = function () {
     let fileList = this.files;
-    let textFile = fileList[0];
+    textFile = fileList[0];
+    allowAdditionalFeatures();
+    loadFile();
+}
+
+function allowAdditionalFeatures() {
+    search.input.disabled = false;
+    search.input.placeholder = 'Поиск...';
+    refreshButton.style.opacity = '0.8';
+    refreshButton.onclick = loadFile;
+    saveFileButton.style.opacity = '0.8';
+    saveFileButton.onclick = saveFile;
+}
+
+function loadFile() {
+    clearInformation();
     // Проверяем тип файла (текстовой файл)
     if (textFile.type == 'text/plain') {
         // Создаём новый FileReader, который и будет читать наш файл
         let reader = new FileReader();
         // Событие успешного чтения
         reader.onloadend = function (event) {
-            text = event.target.result;
+            let text = event.target.result;
             // Ваши любые манипуляции с данными.
             elems = text.split('\n');
             for (let i = 0; i < elems.length; i++) {
@@ -87,7 +103,14 @@ fileInput.onchange = function () {
     } else {
         alert('Это не текстовой файл!');
     }
-};
+}
+
+function clearInformation() {
+    main.style.height = '0px';
+    main.innerHTML = '';
+    rows = [];
+    elems = [];
+}
 
 function describeEditButton() {
     main.replaceChild(createEditableRow(this.index), rows[this.index]);
@@ -154,4 +177,34 @@ function createEditableRow(index) {
 
 function addSpaceForRow() {
     main.style.height = main.clientHeight + 60 + 2 * BORDER_WIDTH + 'px';
+}
+
+function putInfoIntoTextFile() {
+    let text = "";
+    for (let i = 0; i < elems.length; i++) {
+        text += elems[i].name1 + "\t"
+            + elems[i].name2 + "\t"
+            + elems[i].c1 + "\t"
+            + elems[i].c2 + "\t"
+            + elems[i].c3 + "\t"
+            + elems[i].c4 + "\t"
+            + elems[i].c5 + "\t"
+            + elems[i].c6 + "\t"
+            + elems[i].c7 + "\n";
+    }
+    return text;
+}
+
+function saveFile() {
+    var textToSave = putInfoIntoTextFile();
+    var textToSaveAsBlob = new Blob([textToSave], { type: "text/plain" });
+    var textToSaveAsURL = window.URL.createObjectURL(textToSaveAsBlob);
+    var fileNameToSaveAs = "source";
+    var downloadLink = document.createElement("a");
+    downloadLink.download = fileNameToSaveAs;
+    downloadLink.innerHTML = "Download File";
+    downloadLink.href = textToSaveAsURL;
+    downloadLink.style.display = "none";
+
+    downloadLink.click();
 }
