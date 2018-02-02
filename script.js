@@ -10,11 +10,7 @@ const saveFileButton = document.querySelector('#file-save-button');
 
 let BORDER_WIDTH = 3;
 
-let searchQuery = '';
-
 let textFile;
-
-let rows = [];
 
 let elems = [];
 
@@ -26,7 +22,14 @@ search.button.onmousedown = search.input.onsearch = function () {
 }
 
 function makeSearchRequest() {
-    searchQuery = search.input.value;
+    let searchQuery = search.input.value;
+    let newElemsArray = [];
+    elems.forEach((el) => {
+        if (el.name1.includes(searchQuery) || el.name2.includes(searchQuery)) {
+            newElemsArray.push(el);
+        }
+    });
+    renderArray(newElemsArray);
 }
 
 search.input.oninput = function () {
@@ -34,6 +37,7 @@ search.input.oninput = function () {
         search.button.style.opacity = '0.8';
     }
     else {
+        renderArray(elems);
         search.button.style.opacity = '0.4';
     }
 }
@@ -55,13 +59,13 @@ function allowAdditionalFeatures() {
 }
 
 function loadFile() {
-    clearInformation();
     // Проверяем тип файла (текстовой файл)
     if (textFile.type == 'text/plain') {
         // Создаём новый FileReader, который и будет читать наш файл
         let reader = new FileReader();
         // Событие успешного чтения
         reader.onloadend = function (event) {
+            elems = [];
             let text = event.target.result;
             // Ваши любые манипуляции с данными.
             elems = text.split('\n');
@@ -85,14 +89,10 @@ function loadFile() {
                     editButton: edtBttn,
                     saveButton: svBttn,
                 }
-                elems[i].editButton.onmousedown = describeEditButton.bind({ index: i });
-                elems[i].saveButton.onmousedown = describeSaveButton.bind({ index: i });
+                elems[i].editButton.onmousedown = describeEditButton.bind({ element: elems[i] });
+                elems[i].saveButton.onmousedown = describeSaveButton.bind({ element: elems[i] });
             }
-            for (let i = 0; i < elems.length; i++) {
-                rows.push(createCasualRow(i))
-                main.appendChild(rows[rows.length - 1]);
-                addSpaceForRow();
-            }
+            renderArray(elems);
         };
         // Событие ошибки
         reader.onerror = function () {
@@ -105,73 +105,106 @@ function loadFile() {
     }
 }
 
-function clearInformation() {
+function renderArray(array) {
+    clearMain();
+    array = sortArray(array);
+    let newRowsArray = [];
+    array.forEach((el) => {
+        newRowsArray.push(createCasualRow(el));
+        main.appendChild(newRowsArray[newRowsArray.length - 1]);
+        addSpaceForRow();
+    });
+}
+
+function sortArray(array) {
+    array = array.sort((a, b) => { return a.name1.localeCompare(b.name1); });
+    return array;
+}
+
+function clearMain() {
     main.style.height = '0px';
     main.innerHTML = '';
-    rows = [];
-    elems = [];
 }
 
 function describeEditButton() {
-    main.replaceChild(createEditableRow(this.index), rows[this.index]);
+    let index = elems.findIndex((el) => { return el.id === this.element.id; });
+    this.element = elems[index];
+    main.replaceChild(createEditableRow(this.element), document.getElementById(this.element.id));
 }
 
 function describeSaveButton() {
-    let temp = document.getElementsByClassName('row')[this.index];
-    elems[this.index] = {
-        id: this.index,
-        name1: temp.children[1].value,
-        name2: temp.children[2].value,
-        c1: temp.children[3].value,
-        c2: temp.children[4].value,
-        c3: temp.children[5].value,
-        c4: temp.children[6].value,
-        c5: temp.children[7].value,
-        c6: temp.children[8].value,
-        c7: temp.children[9].value,
-        editButton: elems[this.index].editButton,
-        saveButton: elems[this.index].saveButton,
+    let oldRow = document.getElementById(this.element.id);
+    let index = elems.findIndex((el) => { return el.id === this.element.id; });
+    elems[index] = {
+        id: this.element.id,
+        name1: oldRow.children[1].value,
+        name2: oldRow.children[2].value,
+        c1: oldRow.children[3].value,
+        c2: oldRow.children[4].value,
+        c3: oldRow.children[5].value,
+        c4: oldRow.children[6].value,
+        c5: oldRow.children[7].value,
+        c6: oldRow.children[8].value,
+        c7: oldRow.children[9].value,
+        editButton: elems[index].editButton,
+        saveButton: elems[index].saveButton,
     }
-    let newRow = createCasualRow(this.index);
-    main.replaceChild(newRow, temp);
-    rows[this.index] = newRow;
+    this.element = elems[index];
+    let newRow = createCasualRow(this.element);
+    main.replaceChild(newRow, oldRow);
+    toggleRerender();
 }
 
-function createCasualRow(index) {
+function toggleRerender() {
+    let rows = document.querySelectorAll('.row');
+    let newIDsArr = [];
+    rows.forEach((item) => {
+        newIDsArr.push(item.children[0].innerHTML);
+    });
+    let newElemsArr = [];
+    newIDsArr.forEach((ID) => {
+        newElemsArr.push(elems[elems.findIndex((el) => { return '#' + el.id === ID })]);
+    });
+    renderArray(newElemsArr);
+}
+
+function createCasualRow(element) {
     let row = document.createElement('div');
     row.className = 'row';
+    row.id = element.id;
     row.innerHTML = `
-        <div class="id">#${elems[index].id}</div>
-        <div class="name1">${elems[index].name1}</div> 
-        <div class="name2">${elems[index].name2}</div>
-        <div class="c1">${elems[index].c1}</div>
-        <div class="c2">${elems[index].c2}</div>
-        <div class="c3">${elems[index].c3}</div>
-        <div class="c4">${elems[index].c4}</div>
-        <div class="c5">${elems[index].c5}</div>
-        <div class="c6">${elems[index].c6}</div>
-        <div class="c7">${elems[index].c7}</div>
+        <div class="id">#${element.id}</div>
+        <div class="name1">${element.name1}</div> 
+        <div class="name2">${element.name2}</div>
+        <div class="c1">${element.c1}</div>
+        <div class="c2">${element.c2}</div>
+        <div class="c3">${element.c3}</div>
+        <div class="c4">${element.c4}</div>
+        <div class="c5">${element.c5}</div>
+        <div class="c6">${element.c6}</div>
+        <div class="c7">${element.c7}</div>
     `
-    row.appendChild(elems[index].editButton);
+    row.appendChild(element.editButton);
     return row;
 }
 
-function createEditableRow(index) {
+function createEditableRow(element) {
     let row = document.createElement('div');
     row.className = 'row';
+    row.id = element.id;
     row.innerHTML = `
-        <div class="id">#${elems[index].id}</div>
-        <textarea class="name1">${elems[index].name1}</textarea> 
-        <textarea class="name2">${elems[index].name2}</textarea>
-        <textarea class="c1">${elems[index].c1}</textarea>
-        <textarea class="c2">${elems[index].c2}</textarea>
-        <textarea class="c3">${elems[index].c3}</textarea>
-        <textarea class="c4">${elems[index].c4}</textarea>
-        <textarea class="c5">${elems[index].c5}</textarea>
-        <textarea class="c6">${elems[index].c6}</textarea>
-        <textarea class="c7">${elems[index].c7}</textarea>
+        <div class="id">#${element.id}</div>
+        <textarea class="name1">${element.name1}</textarea> 
+        <textarea class="name2">${element.name2}</textarea>
+        <textarea class="c1">${element.c1}</textarea>
+        <textarea class="c2">${element.c2}</textarea>
+        <textarea class="c3">${element.c3}</textarea>
+        <textarea class="c4">${element.c4}</textarea>
+        <textarea class="c5">${element.c5}</textarea>
+        <textarea class="c6">${element.c6}</textarea>
+        <textarea class="c7">${element.c7}</textarea>
     `
-    row.appendChild(elems[index].saveButton);
+    row.appendChild(element.saveButton);
     return row;
 }
 
@@ -190,7 +223,7 @@ function putInfoIntoTextFile() {
             + elems[i].c4 + "\t"
             + elems[i].c5 + "\t"
             + elems[i].c6 + "\t"
-            + elems[i].c7 + "\n";
+            + elems[i].c7.replace('\n', '') + "\n";
     }
     return text;
 }

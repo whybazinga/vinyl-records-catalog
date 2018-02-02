@@ -71,7 +71,7 @@
 
 textarea{
     resize: none;
-    background: rgb(243, 210, 210);
+    background: lightblue;
     line-height: 16px;
     max-height: 90%;
 }
