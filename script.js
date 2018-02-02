@@ -215,15 +215,16 @@ function addSpaceForRow() {
 function putInfoIntoTextFile() {
     let text = "";
     for (let i = 0; i < elems.length; i++) {
-        text += elems[i].name1 + "\t"
-            + elems[i].name2 + "\t"
-            + elems[i].c1 + "\t"
-            + elems[i].c2 + "\t"
-            + elems[i].c3 + "\t"
-            + elems[i].c4 + "\t"
-            + elems[i].c5 + "\t"
-            + elems[i].c6 + "\t"
-            + elems[i].c7.replace('\n', '') + "\n";
+        text += elems[i].name1.replace('\n', '').replace('\t', '') + "\t"
+            + elems[i].name2.replace('\n', '').replace('\t', '') + "\t"
+            + elems[i].c1.replace('\n', '').replace('\t', '') + "\t"
+            + elems[i].c2.replace('\n', '').replace('\t', '') + "\t"
+            + elems[i].c3.replace('\n', '').replace('\t', '') + "\t"
+            + elems[i].c4.replace('\n', '').replace('\t', '') + "\t"
+            + elems[i].c5.replace('\n', '').replace('\t', '') + "\t"
+            + elems[i].c6.replace('\n', '').replace('\t', '') + "\t"
+            + elems[i].c7.replace('\n', '').replace('\t', '') + "\r\n";
+        alert(text);
     }
     return text;
 }
@@ -240,4 +241,5 @@ function saveFile() {
     downloadLink.style.display = "none";
 
     downloadLink.click();
+
 }
